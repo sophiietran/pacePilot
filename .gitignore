@@ -1,0 +1,14 @@
+# Dependencies
+**/node_modules/
+
+# Next.js build directories
+**/frontend/.next/
+**/frontend/out/
+
+# Environment files
+**/.env
+**/.env.local
+**/.env.development.local
+
+# OS files
+.DS_Store
