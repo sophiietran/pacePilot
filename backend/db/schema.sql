@@ -1,4 +1,4 @@
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
   id SERIAL PRIMARY KEY,
   strava_athlete_id BIGINT UNIQUE NOT NULL,
   access_token TEXT NOT NULL,
