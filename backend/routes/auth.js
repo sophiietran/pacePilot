@@ -10,16 +10,18 @@ const router = express.Router(); // router to define routes in this file
 // REDIRECT USER TO STRAVA -> what the connect button links to
 router.get("/strava", (req, res) => {
     
+    // builds IRL to send to strava's oAuth
     const params = new URLSearchParams({
       client_id: process.env.STRAVA_CLIENT_ID, //identifies app to Strava
       redirect_uri: process.env.STRAVA_REDIRECT_URI,//where Strava send user after they approve/deny
       response_type: "code", // tells Strava we want auth code
-      approval_prompt: "auto", //don't force consent screen if user approved before
+      approval_prompt: "force", //don't force consent screen if user approved before
       scope: "read,activity:read_all",
     });
 
     const stravaAuthURL = `https://www.strava.com/oauth/authorize?${params.toString()}`;
 
+    // goes to strava servers for authentication
     res.redirect(stravaAuthURL);
 });
 
