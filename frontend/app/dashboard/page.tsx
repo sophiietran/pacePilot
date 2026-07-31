@@ -1,6 +1,8 @@
 // app/dashboard/page.tsx -> what the site redirects to after auth success
 // This page receives ?user_id=... from our backend's OAuth redirect.
 // fetches that user's name from our backend so we can show a welcome message.
+import WeeklyMileageChart from "./WeeklyMileageChart";
+
 
 type DashboardProps = {
   searchParams: Promise<{ user_id?: string }>;
@@ -21,7 +23,7 @@ export default async function Dashboard({ searchParams }: DashboardProps) {
 
   // ask our backend for this user's firstname/lastname
   const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-  const res = await fetch(`${backendUrl}/userInfo/${user_id}`, {
+  const res = await fetch(`${backendUrl}/data/${user_id}`, {
     cache: "no-store",
   });
 
@@ -29,15 +31,23 @@ export default async function Dashboard({ searchParams }: DashboardProps) {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-4">
-      <h1 className="text-3xl font-bold">Dashboard</h1>
+      <h1 className="text-3xl font-bold">PacePilot</h1>
       {user ? (
-        <p>
-          Welcome, {user.firstname} {user.lastname}!
-        </p>
+        <div className="w-full max-w-2xl">
+          <p className="font-bold text-4xl">
+            Welcome, {user.firstname} {user.lastname}!
+          </p>
+          {user.weeklyMiles && (
+            <div className="w-full max-w-xl">
+              <WeeklyMileageChart
+                weeklyMiles={user.weeklyMiles}
+              />
+            </div>
+          )}
+        </div>
       ) : (
         <p>✅ Connected successfully!</p>
       )}
-      <p className="text-gray-500">Internal user ID: {user_id}</p>
     </main>
   );
 }
