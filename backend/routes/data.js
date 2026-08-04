@@ -1,8 +1,6 @@
-// looks up a user's basic info (firstname/lastname) by internal user id
-
+// looks up a user's info and activities
 const express = require("express");
 const pool = require("../db/pool");
-const axios = require("axios");
 const getWeeklyMiles = require("./utils/weeklyStats");
 
 const router = express.Router(); 
@@ -13,9 +11,9 @@ router.get("/:id", async (req, res) => {
 
     try{
 
-        // result.rows[0] = first name, last name, access token
+        // result.rows[0] = first name, last name
         const result = await pool.query(
-            "SELECT firstname, lastname, access_token FROM users WHERE id = $1", [id]
+            "SELECT firstname, lastname FROM users WHERE id = $1", [id]
         );
 
         // if query is empty
@@ -23,25 +21,20 @@ router.get("/:id", async (req, res) => {
             return res.status(404).json({ error: "User not found" });
         }
 
-        const accessToken = result.rows[0].access_token;
-
-        const activitiesRes = await axios.get(
-          "https://www.strava.com/api/v3/athlete/activities",
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          },
+        // get the user's past activities
+        const activitiesResult = await pool.query(
+          "SELECT start_date_local, distance FROM activities WHERE user_id = $1",
+          [id],
         );
 
         // get weekly mileage
-        const activities = activitiesRes.data
+        const activities = activitiesResult.rows;
         const weeklyMiles = getWeeklyMiles(activities);
 
+        // sends response back to frontend
         res.json({
             firstname: result.rows[0].firstname,
             lastname: result.rows[0].lastname,
-            activities: activities,
             weeklyMiles: weeklyMiles
         });
     } catch (err) {

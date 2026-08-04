@@ -4,6 +4,7 @@
 const express = require("express");
 const axios = require("axios");
 const pool = require("../db/pool");
+const syncActivities = require("./utils/syncActivities");
 
 const router = express.Router(); // router to define routes in this file
 
@@ -77,6 +78,8 @@ router.get("/strava/callback", async (req, res) => { // async since await HTTP/d
         );
         
         const userId = result.rows[0].id;
+        await syncActivities(userId, access_token); // gets full history into activities table
+        
 
         // REDIRECT BACK TO FRONTEND DASHBOARD, passing our internal userId
         // TODO: assing user_id as a raw query param is insecure —
