@@ -1,3 +1,5 @@
+// filters activities table to get current week's activities
+
 const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const METERS_PER_MILE = 1609.34;
 

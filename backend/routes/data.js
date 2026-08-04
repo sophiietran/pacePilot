@@ -1,7 +1,8 @@
 // looks up a user's info and activities
 const express = require("express");
 const pool = require("../db/pool");
-const getWeeklyMiles = require("./utils/weeklyStats");
+const getWeeklyMiles = require("./utils/getWeeklyMiles");
+const syncActivities = require("./utils/syncActivities");
 
 const router = express.Router(); 
 
@@ -43,5 +44,34 @@ router.get("/:id", async (req, res) => {
     
     }
 });
+
+// syncs activities again
+router.post("/:id/sync", async (req, res) =>{
+    const { id } = req.params;
+
+    try {
+        // get user's access_token from users by id
+        const result = await pool.query(
+          "SELECT access_token FROM users WHERE id = $1",
+          [id],
+        );
+
+        // if user is not found
+        if (result.rows.length === 0) {
+          return res.status(404).json({ error: "User not found" });
+        }
+
+        // gets token from result query object
+        const token = result.rows[0].access_token;
+
+        // calls utils/syncActivities
+        await syncActivities(id, token)
+
+        res.json({success:true})
+    } catch (err) {
+        console.error("Error syncing activities:", err.message);
+        res.status(500).json({ error: "Failed to sync activities" });
+    }
+})
 
 module.exports = router;

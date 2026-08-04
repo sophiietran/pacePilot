@@ -29,7 +29,15 @@ async function syncActivities(userId, accessToken){
      [userId, run.id, run.start_date_local, run.distance],
    );
  }
-  
+
+ // remove activities that no longer exist on Strava (e.g. deleted runs)
+ const currentIds = allRuns.map((run) => run.id);
+ await pool.query(
+   `DELETE FROM activities
+     WHERE user_id = $1
+       AND strava_activity_id <> ALL($2::bigint[])`,
+   [userId, currentIds],
+ );
 }
 
 module.exports = syncActivities;
