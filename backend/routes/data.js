@@ -14,7 +14,7 @@ router.get("/:id", async (req, res) => {
 
         // result.rows[0] = first name, last name
         const result = await pool.query(
-            "SELECT firstname, lastname FROM users WHERE id = $1", [id]
+            "SELECT firstname, lastname, profile_picture FROM users WHERE id = $1", [id]
         );
 
         // if query is empty
@@ -36,6 +36,7 @@ router.get("/:id", async (req, res) => {
         res.json({
             firstname: result.rows[0].firstname,
             lastname: result.rows[0].lastname,
+            profilepic: result.rows[0].profile_picture,
             weeklyMiles: weeklyMiles
         });
     } catch (err) {

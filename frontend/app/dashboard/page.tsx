@@ -2,8 +2,8 @@
 // This page receives ?user_id=... from our backend's OAuth redirect.
 // fetches that user's name from our backend so we can show a welcome message.
 import WeeklyMileageChart from "./WeeklyMileageChart";
-import SyncButton from "./SyncButton";
 import MileageHistoryChart from "./MileageHistoryChart";
+import Header from "./Header"
 
 type DashboardProps = {
   searchParams: Promise<{ user_id?: string }>;
@@ -31,31 +31,36 @@ export default async function Dashboard({ searchParams }: DashboardProps) {
   const user = res.ok ? await res.json() : null;
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-4">
-      <h1 className="text-3xl font-bold">PacePilot</h1>
-      {user ? (
-        <div className="w-full max-w-2xl">
-          <p className="font-bold text-4xl">
-            Welcome, {user.firstname} {user.lastname}!
-          </p>
+    <>
+      {/* header */}
+      <Header 
+        firstname = {user.firstname}
+        lastname = {user.lastname}
+        profilepic = {user.profilepic}
+        userId = {user_id} />
 
-          {/* sync button */}
-          <SyncButton userId = {user_id}/>
+      <main className="">
+        {user ? (
+          <div className="w-full max-w-2xl">
+            <p className="font-bold text-4xl">
+              Welcome, {user.firstname} {user.lastname}!
+            </p>
 
-          {/* bar chart of weekly miles */}
-          {user.weeklyMiles && (
-            <div className="w-full max-w-xl">
-              <WeeklyMileageChart
-                weeklyMiles={user.weeklyMiles}
-              />
+            
 
-              <MileageHistoryChart userId={user_id}/>
-            </div>
-          )}
-        </div>
-      ) : (
-        <p>✅ Connected successfully!</p>
-      )}
-    </main>
+            {/* bar chart of weekly miles */}
+            {user.weeklyMiles && (
+              <div className="w-full max-w-xl">
+                <WeeklyMileageChart weeklyMiles={user.weeklyMiles} />
+
+                <MileageHistoryChart userId={user_id} />
+              </div>
+            )}
+          </div>
+        ) : (
+          <p>✅ Connected successfully!</p>
+        )}
+      </main>
+    </>
   );
 }
