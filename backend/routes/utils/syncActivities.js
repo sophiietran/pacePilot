@@ -25,7 +25,9 @@ async function syncActivities(userId, accessToken){
    await pool.query(
      `INSERT INTO activities (user_id, strava_activity_id, start_date_local, distance)
        VALUES ($1, $2, $3, $4)
-       ON CONFLICT (strava_activity_id) DO NOTHING`,
+       ON CONFLICT (strava_activity_id) DO UPDATE
+       SET start_date_local = EXCLUDED.start_date_local,
+           distance = EXCLUDED.distance`,
      [userId, run.id, run.start_date_local, run.distance],
    );
  }

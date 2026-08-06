@@ -2,8 +2,9 @@ require("dotenv").config();
 
 const express = require("express");
 const cors = require("cors");
-const authRoutes = require("./routes/auth");
-const dataRoutes = require("./routes/data")
+const authRouter = require("./routes/auth");
+const dataRouter = require("./routes/data")
+const mileageHistoryRouter = require("./routes/mileageHistory");
 
 const app = express();
 
@@ -11,11 +12,13 @@ app.use(cors());
 app.use(express.json());
 
 // All auth-related routes (Strava OAuth) live under /auth
-app.use("/auth", authRoutes);
+app.use("/auth", authRouter);
 
 // User info
-app.use("/data", dataRoutes);
+app.use("/data", dataRouter);
 
+// mileageHistory
+app.use("/mileageHistory", mileageHistoryRouter);
 
 
 const PORT = process.env.PORT || 5001;

@@ -3,6 +3,7 @@
 // fetches that user's name from our backend so we can show a welcome message.
 import WeeklyMileageChart from "./WeeklyMileageChart";
 import SyncButton from "./SyncButton";
+import MileageHistoryChart from "./MileageHistoryChart";
 
 type DashboardProps = {
   searchParams: Promise<{ user_id?: string }>;
@@ -47,6 +48,8 @@ export default async function Dashboard({ searchParams }: DashboardProps) {
               <WeeklyMileageChart
                 weeklyMiles={user.weeklyMiles}
               />
+
+              <MileageHistoryChart userId={user_id}/>
             </div>
           )}
         </div>

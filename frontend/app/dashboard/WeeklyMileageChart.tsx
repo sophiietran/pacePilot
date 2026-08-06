@@ -34,7 +34,7 @@ export default function WeeklyMileageChart({ weeklyMiles }: WeeklyMileageChartPr
               <XAxis dataKey="day" />
               <YAxis
                 hide
-                domain={[0, (dataMax: number) => Math.ceil(dataMax)]}
+                domain={[0, (dataMax: number) => Math.max(8, Math.ceil(dataMax))]}
               />
               <Bar dataKey="miles" fill="#8884d8" />
             </BarChart>
