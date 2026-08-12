@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
 import SyncButton from "./SyncButton";
 
 type HeaderProps = {
@@ -13,23 +16,43 @@ export default function Header({
   profilepic,
   userId,
 }: HeaderProps) {
-  return (
-    <header className="flex w-full bg-white shadow-md justify-between items-center px-5 py-2">
+  const headerRef = useRef<HTMLElement>(null);
+  const [isScrolled, setIsScrolled] = useState(false);
 
+  // once the user scrolls past the header's own height, fade it out
+  // so it doesn't stay a harsh solid-orange banner the whole way down
+  useEffect(() => {
+    const headerHeight = headerRef.current?.offsetHeight ?? 0;
+
+    function handleScroll() {
+      setIsScrolled(window.scrollY > headerHeight);
+    }
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  return (
+    <header
+      ref={headerRef}
+      className={`flex w-full justify-between items-center px-5 py-1.5 sticky top-0 transition-colors duration-300 ${
+        isScrolled ? "bg-[#ff5912]/60 backdrop-blur-sm" : "bg-[#ff5912]"
+      }`}
+    >
       {/* sync button */}
       <SyncButton userId={userId} />
 
       {/* title */}
-      <span className="text-[#FC4C02] text-3xl font-bold">PacePilot</span>
+      <span className="text-white text-2xl font-bold">PacePilot</span>
 
       {/* profile pic and name */}
       <div className="flex items-center gap-3">
         <img
           src={profilepic}
           alt={`${firstname} ${lastname}`}
-          className="rounded-full w-10 h-10"
+          className="rounded-xl w-10 h-10"
         />
-        <span className="text-[#FC4C02] text-lg font-bold">
+        <span className="text-white text-lg font-bold">
           {firstname} {lastname}
         </span>
       </div>

@@ -1,9 +1,10 @@
 // app/dashboard/page.tsx -> what the site redirects to after auth success
 // This page receives ?user_id=... from our backend's OAuth redirect.
 // fetches that user's name from our backend so we can show a welcome message.
+import Header from "./Header";
+import Hero from "./Hero";
 import WeeklyMileageChart from "./WeeklyMileageChart";
 import MileageHistoryChart from "./MileageHistoryChart";
-import Header from "./Header"
 
 type DashboardProps = {
   searchParams: Promise<{ user_id?: string }>;
@@ -31,26 +32,24 @@ export default async function Dashboard({ searchParams }: DashboardProps) {
   const user = res.ok ? await res.json() : null;
 
   return (
-    <>
+    <div className="">
       {/* header */}
-      <Header 
-        firstname = {user.firstname}
-        lastname = {user.lastname}
-        profilepic = {user.profilepic}
-        userId = {user_id} />
+      <Header
+        firstname={user.firstname}
+        lastname={user.lastname}
+        profilepic={user.profilepic}
+        userId={user_id}
+      />
 
-      <main className="">
+      {/* hero */}
+      <Hero firstname={user.firstname} />
+
+      <main className="min-h-screen rounded-t-4xl p-30 bg-[#1a1a1a]">
         {user ? (
-          <div className="w-full max-w-2xl">
-            <p className="font-bold text-4xl">
-              Welcome, {user.firstname} {user.lastname}!
-            </p>
-
-            
-
+          <div className="w-full">
             {/* bar chart of weekly miles */}
             {user.weeklyMiles && (
-              <div className="w-full max-w-xl">
+              <div className="w-full max-w-2xl">
                 <WeeklyMileageChart weeklyMiles={user.weeklyMiles} />
 
                 <MileageHistoryChart userId={user_id} />
@@ -61,6 +60,6 @@ export default async function Dashboard({ searchParams }: DashboardProps) {
           <p>✅ Connected successfully!</p>
         )}
       </main>
-    </>
+    </div>
   );
 }

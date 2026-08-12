@@ -11,15 +11,41 @@ type WeeklyMileageChartProps = {
   weeklyMiles: { day: string; miles: number }[];
 };
 
+// returns "Mon D - Mon D" for the current week (Monday -> Sunday)
+function getWeekRangeLabel(): string {
+    const today = new Date();
+    const dayOfWeek = today.getDay(); // 0 = Sunday
+    const diffToMonday = (dayOfWeek + 6) % 7;
+
+    const monday = new Date(today);
+    monday.setDate(today.getDate() - diffToMonday);
+
+    const sunday = new Date(monday);
+    sunday.setDate(monday.getDate() + 6);
+
+    const format = (d: Date) =>
+      d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+
+    return `${format(monday)} - ${format(sunday)}`;
+}
+
 export default function WeeklyMileageChart({ weeklyMiles }: WeeklyMileageChartProps) {
-    
+
     const totalMiles = weeklyMiles.reduce((sum, day) => sum + day.miles, 0);
+    const weekRange = getWeekRangeLabel();
 
     return (
-      <div className="flex items-center gap-4">
-        {/* bar graph */}
-        <div className="flex-1">
-          <ResponsiveContainer width="100%" height={300}>
+      <div className="">
+        {/* date range */}
+        <span className="text-2xl font-semibold text-white">
+          {weekRange}
+        </span>
+
+        <div className="flex items-center border border-white/20 p-6 mt-2 rounded-4xl bg-white/10 backdrop-blur-md shadow-lg">
+
+          {/* bar graph */}
+          <div className="flex-1">
+          <ResponsiveContainer width="100%" height={200}>
             <BarChart
               data={weeklyMiles}
               barSize={40}
@@ -34,20 +60,23 @@ export default function WeeklyMileageChart({ weeklyMiles }: WeeklyMileageChartPr
               <XAxis dataKey="day" />
               <YAxis
                 hide
-                domain={[0, (dataMax: number) => Math.max(8, Math.ceil(dataMax))]}
+                domain={[
+                  0,
+                  (dataMax: number) => Math.max(8, Math.ceil(dataMax)),
+                ]}
               />
-              <Bar dataKey="miles" fill="#8884d8" />
+              <Bar dataKey="miles" fill="#f4792c" />
             </BarChart>
           </ResponsiveContainer>
         </div>
 
-        {/* total week mileage */}
-        <div className="flex h-33 w-33 flex-none items-center justify-center rounded-full border-4 border-[#8884d8]">
-          <span className="font-semibold text-3xl">
-            {totalMiles.toFixed(2)}
-            <span className="text-sm ml-1.5">mi</span>
-          </span>
-        
+          {/* total week mileage */}
+          <div className="h-33 w-33 flex items-center justify-center rounded-full border-3 border-white text-white">
+            <span className="font-semibold text-3xl">
+              {totalMiles.toFixed(2)}
+              <span className="text-sm ml-1.5">mi</span>
+            </span>
+          </div>
         </div>
       </div>
     );

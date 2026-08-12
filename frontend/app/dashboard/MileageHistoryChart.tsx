@@ -156,46 +156,52 @@ export default function MileageHistoryChart({ userId }: MileageHistoryProps){
     ];
 
     return (
-      <div>
-
+      <div className="border border-white/20 p-6 mt-2 rounded-4xl bg-white/10 backdrop-blur-md shadow-lg">
         {/* line graph */}
         <ResponsiveContainer width="100%" height={300}>
-          <AreaChart data = {chartData}>
-            <CartesianGrid vertical={false} stroke="#e0e0e0" />
+          <AreaChart
+            data={chartData}
+            margin={{ top: 10, right: 10, bottom: 0, left: 0 }}
+          >
+            <CartesianGrid vertical={false} stroke="#ffffff33" />
             <XAxis
               dataKey="period"
               ticks={ticks}
               tickFormatter={(value) => formatTick(value, range)}
-              />
+              tick={{ fill: "#ffffff" }}
+            />
             <YAxis
               allowDecimals={false}
               domain={[0, yAxisMax]}
               ticks={yAxisTicks}
-              />
+              tick={{ fill: "#ffffff" }}
+              width={30}
+            />
             <Area
               type="linear"
               dataKey="miles"
-              stroke="#8884d8"
+              stroke="#FC4C02"
               strokeWidth={2}
-              fill="#8884d8"
+              fill="#FC4C02"
               fillOpacity={0.2}
               dot={{ r: 3 }}
-              />
+            />
           </AreaChart>
         </ResponsiveContainer>
-              {/* buttons */}
-              <div className="flex justify-center gap-2 mt-3">
-                {ranges.map((r) => (
-                  <button
-                    key={r.value}
-                    onClick={() => setRange(r.value)}
-                    className={`px-3 py-1 text-sm rounded-sm cursor-pointer ${
-                      range === r.value ? "bg-[#8884d8] text-white" : "bg-gray-200"
-                    }`}>
-                    {r.label}
-                  </button>
-                ))}
-              </div>
+        {/* buttons */}
+        <div className="flex justify-center gap-2 mt-3">
+          {ranges.map((r) => (
+            <button
+              key={r.value}
+              onClick={() => setRange(r.value)}
+              className={`px-3 py-1 text-sm rounded-2xl cursor-pointer ${
+                range === r.value ? "bg-[#FC4C02] text-white" : "bg-white/20 text-white"
+              }`}
+            >
+              {r.label}
+            </button>
+          ))}
+        </div>
       </div>
     );
   }
