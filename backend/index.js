@@ -5,6 +5,9 @@ const cors = require("cors");
 const authRouter = require("./routes/auth");
 const dataRouter = require("./routes/data")
 const mileageHistoryRouter = require("./routes/mileageHistory");
+const streakRouter = require("./routes/streak")
+const personalBestsRouter = require("./routes/personalBests")
+
 
 const app = express();
 
@@ -20,6 +23,11 @@ app.use("/data", dataRouter);
 // mileageHistory
 app.use("/mileageHistory", mileageHistoryRouter);
 
+// activity streak
+app.use("/streak", streakRouter);
+
+// personal best
+app.use("/personalBests", personalBestsRouter);
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {

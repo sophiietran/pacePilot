@@ -23,12 +23,13 @@ async function syncActivities(userId, accessToken){
  // save to database
  for (const run of allRuns) {
    await pool.query(
-     `INSERT INTO activities (user_id, strava_activity_id, start_date_local, distance)
-       VALUES ($1, $2, $3, $4)
+     `INSERT INTO activities (user_id, strava_activity_id, start_date_local, distance, moving_time)
+       VALUES ($1, $2, $3, $4, $5)
        ON CONFLICT (strava_activity_id) DO UPDATE
        SET start_date_local = EXCLUDED.start_date_local,
-           distance = EXCLUDED.distance`,
-     [userId, run.id, run.start_date_local, run.distance],
+           distance = EXCLUDED.distance,
+           moving_time = EXCLUDED.moving_time`,
+     [userId, run.id, run.start_date_local, run.distance, run.moving_time],
    );
  }
 
