@@ -35,9 +35,9 @@ export default function WeeklyMileageChart({ weeklyMiles }: WeeklyMileageChartPr
     const weekRange = getWeekRangeLabel();
 
     return (
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-12">
         {/* date range */}
-        <span className="text-2xl font-semibold text-white mb-6">
+        <span className="text-2xl font-semibold text-white">
           {weekRange}
         </span>
 

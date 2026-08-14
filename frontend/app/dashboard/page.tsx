@@ -6,6 +6,7 @@ import Hero from "./Hero";
 import WeeklyMileageChart from "./WeeklyMileageChart";
 import MileageHistoryChart from "./MileageHistoryChart";
 import StreakCalendar from "./StreakCalendar";
+import PersonalBests from "./PersonalBests";
 
 type DashboardProps = {
   searchParams: Promise<{ user_id?: string }>;
@@ -33,7 +34,7 @@ export default async function Dashboard({ searchParams }: DashboardProps) {
   const user = res.ok ? await res.json() : null;
 
   return (
-    <div className="">
+    <div>
       {/* header */}
       <Header
         firstname={user.firstname}
@@ -57,11 +58,14 @@ export default async function Dashboard({ searchParams }: DashboardProps) {
               </div>
             )}
 
-            {/* right column: streak calendar */}
-            <div className="">
+            {/* right column: streak calendar and personal bests */}
+            <div className="flex flex-col items-end gap-8">
               <StreakCalendar userId={user_id} />
-            </div>
 
+              <PersonalBests userId={user_id} />
+
+            </div>
+            
           </div>
         ) : (
           <p>✅ Connected successfully!</p>
