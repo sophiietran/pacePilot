@@ -24,7 +24,7 @@ function getWeekRangeLabel(): string {
     sunday.setDate(monday.getDate() + 6);
 
     const format = (d: Date) =>
-      d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+      d.toLocaleDateString("en-US", { month: "long", day: "numeric" });
 
     return `${format(monday)} - ${format(sunday)}`;
 }
@@ -35,39 +35,39 @@ export default function WeeklyMileageChart({ weeklyMiles }: WeeklyMileageChartPr
     const weekRange = getWeekRangeLabel();
 
     return (
-      <div className="">
+      <div className="flex flex-col gap-6">
         {/* date range */}
-        <span className="text-2xl font-semibold text-white">
+        <span className="text-2xl font-semibold text-white mb-6">
           {weekRange}
         </span>
 
-        <div className="flex items-center border border-white/20 p-6 mt-2 rounded-4xl bg-white/10 backdrop-blur-md shadow-lg">
+        <div className="flex items-center border border-white/20 p-6 gap-6 rounded-2xl bg-white/10 backdrop-blur-md shadow-lg">
 
           {/* bar graph */}
           <div className="flex-1">
-          <ResponsiveContainer width="100%" height={200}>
-            <BarChart
-              data={weeklyMiles}
-              barSize={40}
-              barCategoryGap="60%"
-              margin={{
-                top: 20,
-                right: 0,
-                left: 0,
-                bottom: 5,
-              }}
-            >
-              <XAxis dataKey="day" />
-              <YAxis
-                hide
-                domain={[
-                  0,
-                  (dataMax: number) => Math.max(8, Math.ceil(dataMax)),
-                ]}
-              />
-              <Bar dataKey="miles" fill="#f4792c" />
-            </BarChart>
-          </ResponsiveContainer>
+            <ResponsiveContainer width="100%" height={175}>
+              <BarChart
+                data={weeklyMiles}
+                barSize={40}
+                barCategoryGap="60%"
+                margin={{
+                  top: 20,
+                  right: 0,
+                  left: 0,
+                  bottom: 5,
+                }}
+              >
+                <XAxis dataKey="day" />
+                <YAxis
+                  hide
+                  domain={[
+                    0,
+                    (dataMax: number) => Math.max(8, Math.ceil(dataMax)),
+                  ]}
+                />
+                <Bar dataKey="miles" fill="#f4792c" />
+              </BarChart>
+            </ResponsiveContainer>
         </div>
 
           {/* total week mileage */}

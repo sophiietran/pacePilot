@@ -35,9 +35,8 @@ export default function Header({
   return (
     <header
       ref={headerRef}
-      className={`flex w-full justify-between items-center px-5 py-1.5 sticky top-0 transition-colors duration-300 ${
-        isScrolled ? "bg-[#ff5912]/60 backdrop-blur-sm" : "bg-[#ff5912]"
-      }`}
+      className="z-10 flex w-full justify-between items-center px-5 py-1.5 sticky top-0 bg-[#ff5912]"
+      
     >
       {/* sync button */}
       <SyncButton userId={userId} />

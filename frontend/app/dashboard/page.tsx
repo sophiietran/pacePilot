@@ -5,6 +5,7 @@ import Header from "./Header";
 import Hero from "./Hero";
 import WeeklyMileageChart from "./WeeklyMileageChart";
 import MileageHistoryChart from "./MileageHistoryChart";
+import StreakCalendar from "./StreakCalendar";
 
 type DashboardProps = {
   searchParams: Promise<{ user_id?: string }>;
@@ -44,17 +45,23 @@ export default async function Dashboard({ searchParams }: DashboardProps) {
       {/* hero */}
       <Hero firstname={user.firstname} />
 
-      <main className="min-h-screen rounded-t-4xl p-30 bg-[#1a1a1a]">
+      <main className="min-h-screen rounded-t-4xl bg-[#1a1a1a]">
         {user ? (
-          <div className="w-full">
-            {/* bar chart of weekly miles */}
+          <div className="w-full max-w-6xl mx-auto flex items-start justify-between">
+            {/* left column: bar chart + line chart */}
             {user.weeklyMiles && (
-              <div className="w-full max-w-2xl">
+              <div className="w-full max-w-2xl flex flex-col gap-8">
                 <WeeklyMileageChart weeklyMiles={user.weeklyMiles} />
 
                 <MileageHistoryChart userId={user_id} />
               </div>
             )}
+
+            {/* right column: streak calendar */}
+            <div className="">
+              <StreakCalendar userId={user_id} />
+            </div>
+
           </div>
         ) : (
           <p>✅ Connected successfully!</p>

@@ -156,7 +156,7 @@ export default function MileageHistoryChart({ userId }: MileageHistoryProps){
     ];
 
     return (
-      <div className="border border-white/20 p-6 mt-2 rounded-4xl bg-white/10 backdrop-blur-md shadow-lg">
+      <div className="border border-white/20 p-6 rounded-2xl bg-white/10 backdrop-blur-md shadow-lg">
         {/* line graph */}
         <ResponsiveContainer width="100%" height={300}>
           <AreaChart
