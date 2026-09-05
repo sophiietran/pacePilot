@@ -51,14 +51,17 @@ export default function PersonalBests({userId}: PersonalBestsProps){
 
     return (
       <div className="border text-white border-white/20 p-6 rounded-2xl bg-white/10 backdrop-blur-md shadow-lg">
+
+        <h1 className="font-bold text-xl ">Personal Bests</h1>
+
         {CATEGORY_LABELS.map(({ key, label }) => {
           const entry = data?.[key];
 
           return (
-            <div key={key} className="flex flex-col items-center">
-              <span className="font-bold text-xl">{label}</span>
+            <div key={key} className="flex flex-col items-center my-4">
+              <span className="font-semibold text-lg">{label}</span>
 
-              <div className="flex gap-3">
+              <div className="flex gap-3 ">
                 {entry ? (
                   <>
                     <span>{entry.time}</span>
