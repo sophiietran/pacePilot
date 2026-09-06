@@ -72,7 +72,7 @@ export default function StreakCalendar({userId}: StreakCalendarProps){
     const activeSet = useMemo(() => new Set(data?.activeDates ?? []), [data]);
 
     return (
-      <div className="w-96 border border-white/20 p-6 rounded-2xl bg-white/10 backdrop-blur-md shadow-lg">
+      <div className="w-md border border-white/20 p-6 rounded-2xl bg-white/10 backdrop-blur-md shadow-lg">
         {/* header: month + streak count */}
         <div className="flex items-center justify-between mb-6">
           <span className="text-white text-lg font-semibold">{monthLabel}</span>
