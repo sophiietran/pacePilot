@@ -42,38 +42,31 @@ export default function PersonalBests({userId}: PersonalBestsProps){
 
     // display labels:
     const CATEGORY_LABELS: { key: keyof PersonalBestsData; label: string }[] = [
-      { key: "mile", label: "1 Mile" },
-      { key: "fiveK", label: "5K" },
-      { key: "tenK", label: "10K" },
+      { key: "mile", label: "1mi" },
+      { key: "fiveK", label: "5k" },
+      { key: "tenK", label: "10k" },
       { key: "half", label: "Half" },
       { key: "full", label: "Full" },
     ];
 
     return (
-      <div className="border text-white border-white/20 p-6 rounded-2xl bg-white/10 backdrop-blur-md shadow-lg">
+      <div className="w-md border text-white border-white/20 p-6 rounded-2xl bg-white/10 backdrop-blur-md shadow-lg">
 
-        <h1 className="font-bold text-xl ">Personal Bests</h1>
+        <h1 className="font-bold text-lg text-center mb-4">Personal Bests</h1>
 
-        {CATEGORY_LABELS.map(({ key, label }) => {
-          const entry = data?.[key];
+        <div className="grid grid-cols-5">
+          {CATEGORY_LABELS.map(({ key, label }) => {
+            const entry = data?.[key];
 
-          return (
-            <div key={key} className="flex flex-col items-center my-4">
-              <span className="font-semibold text-lg">{label}</span>
-
-              <div className="flex gap-3 ">
-                {entry ? (
-                  <>
-                    <span>{entry.time}</span>
-                    <span>{entry.pace}</span>
-                  </>
-                ) : (
-                  <span>--</span>
-                )}
+            return (
+              <div key={key} className="flex flex-col items-center gap-1">
+                <span className="font-semibold text-sm text-white/60">{label}</span>
+                <span className="font-bold text-sm">{entry ? entry.time : "--"}</span>
+                <span className="text-xs text-white/60">{entry ? entry.pace : "--"}</span>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
     );
 }
