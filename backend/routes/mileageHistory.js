@@ -16,7 +16,7 @@ router.get("/:id", async (req, res) => {
         "1m": { interval: "1 month", trunc: "day"},
         "3m":{ interval: "3 months", trunc: "week"},
         "6m": { interval: "6 months", trunc: "week"},
-        "ytd": { interval: null, trunc: "month"}, // null = since Jan 1 of this year
+        "ytd": { interval: null, trunc: "week"}, // null = since Jan 1 of this year
     };
 
     const config = intervals[range] || intervals["1m"]

@@ -7,6 +7,8 @@ import WeeklyMileageChart from "./WeeklyMileageChart";
 import MileageHistoryChart from "./MileageHistoryChart";
 import StreakCalendar from "./StreakCalendar";
 import PersonalBests from "./PersonalBests";
+import WeeklySummary from "./WeeklySummary";
+import { SyncProvider } from "./SyncContext";
 
 type DashboardProps = {
   searchParams: Promise<{ user_id?: string }>;
@@ -34,43 +36,47 @@ export default async function Dashboard({ searchParams }: DashboardProps) {
   const user = res.ok ? await res.json() : null;
 
   return (
-    <div>
-      {/* header */}
-      <Header
-        firstname={user.firstname}
-        lastname={user.lastname}
-        profilepic={user.profilepic}
-        userId={user_id}
-      />
+    <SyncProvider>
+      <div>
+        {/* header */}
+        <Header
+          firstname={user.firstname}
+          lastname={user.lastname}
+          profilepic={user.profilepic}
+          userId={user_id}
+        />
 
-      {/* hero */}
-      <Hero firstname={user.firstname} />
+        {/* hero */}
+        <Hero firstname={user.firstname} />
 
-      <main className="min-h-screen rounded-t-4xl bg-[#1a1a1a]">
-        {user ? (
-          <div className="w-full max-w-6xl mx-auto flex items-start justify-between">
-            {/* left column: bar chart + line chart */}
-            {user.weeklyMiles && (
-              <div className="w-full max-w-2xl flex flex-col gap-8">
-                <WeeklyMileageChart weeklyMiles={user.weeklyMiles} />
+        <main className="min-h-screen rounded-t-4xl bg-[#1a1a1a]">
+          {user ? (
+            <div className="w-full max-w-6xl mx-auto flex items-start justify-between">
+              {/* left column: bar chart + line chart */}
+              {user.weeklyMiles && (
+                <div className="w-full max-w-2xl flex flex-col gap-8">
+                  <WeeklyMileageChart weeklyMiles={user.weeklyMiles} />
 
-                <MileageHistoryChart userId={user_id} />
+                  <WeeklySummary userId={user_id}/>
+
+                  <MileageHistoryChart userId={user_id} />
+                </div>
+              )}
+
+              {/* right column: streak calendar and personal bests */}
+              <div className="flex flex-col items-end gap-8">
+                <StreakCalendar userId={user_id} />
+
+                <PersonalBests userId={user_id} />
+
               </div>
-            )}
-
-            {/* right column: streak calendar and personal bests */}
-            <div className="flex flex-col items-end gap-8">
-              <StreakCalendar userId={user_id} />
-
-              <PersonalBests userId={user_id} />
 
             </div>
-            
-          </div>
-        ) : (
-          <p>✅ Connected successfully!</p>
-        )}
-      </main>
-    </div>
+          ) : (
+            <p>✅ Connected successfully!</p>
+          )}
+        </main>
+      </div>
+    </SyncProvider>
   );
 }

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useSyncContext } from "./SyncContext";
 
 type SyncButtonProps = {
   userId: string;
@@ -10,6 +11,7 @@ type SyncButtonProps = {
 export default function SyncButton({ userId }: SyncButtonProps){
 
     const router = useRouter();
+    const { notifySync } = useSyncContext();
     const [isSyncing, setIsSyncing] = useState(false);
 
     const handleSync = async () => {
@@ -18,6 +20,7 @@ export default function SyncButton({ userId }: SyncButtonProps){
         await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/data/${userId}/sync`,
            { method: "POST", });
 
+        notifySync();
         router.refresh();
         setIsSyncing(false);
     };

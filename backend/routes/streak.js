@@ -47,17 +47,27 @@ router.get("/:id", async (req, res) => {
             return d;
         }
 
+        // formats a Date using its own local calendar date - toISOString() would
+        // convert to UTC first, which can shift the date across midnight and
+        // cause a mismatch against the Postgres-derived streakWeeks dates
+        function formatLocalDate(d){
+            const year = d.getFullYear();
+            const month = String(d.getMonth() + 1).padStart(2, "0");
+            const day = String(d.getDate()).padStart(2, "0");
+            return `${year}-${month}-${day}`;
+        }
+
         // the walk back loop - starts at this week's monday
         let cursor = getMonday(new Date());
 
         // the week in progress shouldn't break the streak if no runs yet
-        if(!streakWeeks.has(cursor.toISOString().slice(0, 10))){
+        if(!streakWeeks.has(formatLocalDate(cursor))){
             cursor.setDate(cursor.getDate() - 7);
         }
 
         // checks if the past week is in the set of weeks that has an activity down
         let count = 0;
-        while (streakWeeks.has(cursor.toISOString().slice(0, 10))){
+        while (streakWeeks.has(formatLocalDate(cursor))){
             count++; // if it does, increase the count and check previous week
             cursor.setDate(cursor.getDate() - 7);
         }

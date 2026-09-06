@@ -17,4 +17,14 @@ CREATE TABLE IF NOT EXISTS activities(
   start_date_local TIMESTAMP NOT NULL,
   distance NUMERIC NOT NULL, -- in meters
   moving_time INTEGER NOT NULL -- in seconds
-)
+);
+
+CREATE TABLE IF NOT EXISTS weekly_summaries (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id) NOT NULL,
+  week_start DATE NOT NULL,  -- only care about the day
+  week_end DATE NOT NULL,
+  summary_text TEXT NOT NULL, -- summary that AI generates, variable length
+  created_at TIMESTAMP DEFAULT NOW(),
+  UNIQUE(user_id, week_start) -- avoids creating duplicate rows
+);

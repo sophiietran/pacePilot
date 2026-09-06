@@ -7,6 +7,7 @@ const dataRouter = require("./routes/data")
 const mileageHistoryRouter = require("./routes/mileageHistory");
 const streakRouter = require("./routes/streak")
 const personalBestsRouter = require("./routes/personalBests")
+const weeklySummaryAIRouter = require("./routes/weeklySummaryAI")
 
 
 const app = express();
@@ -28,6 +29,9 @@ app.use("/streak", streakRouter);
 
 // personal best
 app.use("/personalBests", personalBestsRouter);
+
+// weekly summary from AI
+app.use("/weeklySummary", weeklySummaryAIRouter);
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
