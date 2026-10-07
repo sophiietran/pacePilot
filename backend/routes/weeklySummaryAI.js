@@ -9,7 +9,7 @@ const Anthropic = require("@anthropic-ai/sdk");
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
 const getWeeklyStats = require("./utils/getWeeklyStats")
-const { SYSTEM_PROMPT, buildMsgForSummary, buildRestWeekMessage } = require( "./utils/buildSummaryPrompt")
+const { SUMMARY_SYSTEM_PROMPT, buildSummaryPrompt, buildRestWeekPrompt } = require( "./utils/buildSummaryPrompt")
 
 // returns { weekStart, weekEnd } as Date objects for Monday-Sunday of a given week
 // weeksAgo: 0 = this week, 1 = last week
@@ -74,15 +74,15 @@ router.post("/:id/generate", async (req, res) =>{
     );
 
     const aiMsg = thisWeekStats === null
-      ? buildRestWeekMessage(lastWeekStats)
-      : buildMsgForSummary(thisWeekStats, lastWeekStats);
+      ? buildRestWeekPrompt(lastWeekStats)
+      : buildSummaryPrompt(thisWeekStats, lastWeekStats);
 
     // claude call
     const response = await anthropic.messages.create({
       model: "claude-haiku-4-5",
       max_tokens: 300,
       system:
-        SYSTEM_PROMPT,
+        SUMMARY_SYSTEM_PROMPT,
       messages: [
         {
           role: "user",

@@ -1,3 +1,10 @@
+// this file intentionally uses local-time Date arithmetic (getDate/setDate/etc),
+// not UTC. start_date_local is a TIMESTAMP (no timezone) column, and pg parses
+// that type into a Date built from the literal local wall-clock values it stores
+// — so reading it back with local getters already gives the correct calendar day.
+// (Contrast with getWeekBoundaries.js, which reads Postgres DATE columns and has
+// to use UTC for the same reason, in reverse.)
+
 const express = require("express");
 const pool = require("../db/pool");
 
